@@ -1,4 +1,5 @@
 # Corporate Microblog Service (Python Advanced Final Project)
+
 ## About this project
 
 This repository contains a backend service for a corporate microblogging platform (similar to Twitter), implemented as a final project for a Python Advanced course.
@@ -13,35 +14,14 @@ The service provides a small but realistic REST API:
 - **Feed** – get a feed of tweets from followed users, sorted by popularity (likes) and recency.
 - **User profiles** – fetch information about the current user (`/users/me`) and any other user (`/users/<id>`).
 
-The project uses:
-
-- **Flask** as the web framework,
-- **PostgreSQL** as the database,
-- **SQLAlchemy + Flask-Migrate** for ORM and migrations,
-- **Docker + docker-compose** for local development and deployment.
-
 The code is structured as a small production-style service: blueprints for the API, separate models and auth helpers, unified error format, and a docker-compose configuration to run the app together with PostgreSQL.
-
-
-Backend for a corporate microblogging service (Twitter-like), implemented with Flask and PostgreSQL.
-
-The service supports:
-
-- creating and deleting tweets (with optional media);
-- liking and unliking tweets;
-- following and unfollowing users;
-- fetching a feed of tweets from followed users, sorted by popularity;
-- fetching user profiles (`/users/me` and `/users/<id>`).
-
-All endpoints use `api-key` HTTP header to identify the current user.
-
 
 ## Tech stack
 
-- Python, Flask
-- PostgreSQL
-- SQLAlchemy, Flask-Migrate
-- Docker, docker-compose
+- Python, Flask  
+- PostgreSQL  
+- SQLAlchemy, Flask-Migrate  
+- Docker, docker-compose  
 
 ## Initial data / users
 
@@ -52,6 +32,7 @@ Example (Python shell):
 ```python
 from app import create_app, db
 from app.models import User
+
 app = create_app()
 app.app_context().push()
 
@@ -59,12 +40,11 @@ user = User(name="Test user", api_key="TEST_API_KEY_123")
 db.session.add(user)
 db.session.commit()
 
+
 Then use TEST_API_KEY_123 in the api-key header.
 
 
-## Example request
-
-```bash
+Example request
 curl -X POST "http://localhost:5000/api/tweets" \
   -H "Content-Type: application/json" \
   -H "api-key: TEST_API_KEY_123" \
@@ -74,30 +54,29 @@ curl -X POST "http://localhost:5000/api/tweets" \
   }'
 
 
+Database migrations
 
-## Database migrations
+Inside the web container:
 
-Inside the `web` container:
-
-```bash
 flask db upgrade
 
 
-## Project structure
+Project structure
 
-- `app/` – application package (models, API blueprints, auth helpers)
-- `migrations/` – database migrations (Flask-Migrate)
-- `Dockerfile`, `docker-compose.yml` – container configuration
-- `uploads/` – stored media files
+app/ – application package (models, API blueprints, auth helpers)
 
-## Running with Docker
+migrations/ – database migrations (Flask-Migrate)
 
-```bash
+Dockerfile, docker-compose.yml – container configuration
+
+uploads/ – stored media files
+
+
+Running with Docker
+
 docker-compose up --build
 
-
-The API will be available at: http://localhost:5000/api
-
+The API will be available at: http://localhost:5000/api.
 
 
 Endpoints (short overview)
@@ -122,14 +101,17 @@ GET /api/users/me
 
 GET /api/users/<id>
 
+
 For error responses the format is:
+
 {
   "result": false,
   "error_type": "str",
   "error_message": "str"
 }
 
-Further work:
+
+Further work
 
 add Swagger/OpenAPI documentation for all endpoints;
 
