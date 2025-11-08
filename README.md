@@ -35,12 +35,60 @@ The service supports:
 
 All endpoints use `api-key` HTTP header to identify the current user.
 
+
 ## Tech stack
 
 - Python, Flask
 - PostgreSQL
 - SQLAlchemy, Flask-Migrate
 - Docker, docker-compose
+
+## Initial data / users
+
+For simplicity users are created directly in the database or via a small helper script.
+
+Example (Python shell):
+
+```python
+from app import create_app, db
+from app.models import User
+app = create_app()
+app.app_context().push()
+
+user = User(name="Test user", api_key="TEST_API_KEY_123")
+db.session.add(user)
+db.session.commit()
+
+Then use TEST_API_KEY_123 in the api-key header.
+
+
+## Example request
+
+```bash
+curl -X POST "http://localhost:5000/api/tweets" \
+  -H "Content-Type: application/json" \
+  -H "api-key: TEST_API_KEY_123" \
+  -d '{
+    "tweet_data": "Hello from the corporate microblog!",
+    "tweet_media_ids": []
+  }'
+
+
+
+## Database migrations
+
+Inside the `web` container:
+
+```bash
+flask db upgrade
+
+
+## Project structure
+
+- `app/` – application package (models, API blueprints, auth helpers)
+- `migrations/` – database migrations (Flask-Migrate)
+- `Dockerfile`, `docker-compose.yml` – container configuration
+- `uploads/` – stored media files
 
 ## Running with Docker
 
